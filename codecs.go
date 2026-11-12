@@ -956,4 +956,8 @@ func init() {
 	reverseCodecs[0xa37124] = codecs["holochain-sig-v1"]
 	codecs["skynet-ns"] = &codec{id: 0xb19910, name: "skynet-ns", tag: "namespace"}
 	reverseCodecs[0xb19910] = codecs["skynet-ns"]
+	codecs["adnl"] = &codec{id: 0xb69910, name: "adnl", tag: "namespace"}
+	reverseCodecs[0xb69910] = codecs["adnl"]
+	codecs["ton-storage"] = &codec{id: 0xb79910, name: "ton-storage", tag: "namespace"}
+	reverseCodecs[0xb79910] = codecs["ton-storage"]
 }

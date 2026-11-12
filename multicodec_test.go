@@ -280,3 +280,35 @@ func TestGetCodec(t *testing.T) {
 		}
 	}
 }
+
+func TestTONCodecs(t *testing.T) {
+	tests := []struct {
+		name   string
+		id     uint64
+		prefix []byte
+	}{
+		{name: "adnl", id: 0xb69910, prefix: []byte{0x90, 0xb2, 0xda, 0x05}},
+		{name: "ton-storage", id: 0xb79910, prefix: []byte{0x90, 0xb2, 0xde, 0x05}},
+	}
+	payload := make([]byte, 32)
+	for i := range payload {
+		payload[i] = byte(i)
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.id, MustID(test.name))
+			assert.Equal(t, test.name, MustName(test.id))
+			encoded, err := AddCodec(test.name, payload)
+			require.NoError(t, err)
+			assert.Equal(t, append(test.prefix, payload...), encoded)
+			assert.True(t, IsCodec(test.name, encoded))
+			id, err := GetCodec(encoded)
+			require.NoError(t, err)
+			assert.Equal(t, test.id, id)
+			decoded, id, err := RemoveCodec(encoded)
+			require.NoError(t, err)
+			assert.Equal(t, test.id, id)
+			assert.Equal(t, payload, decoded)
+		})
+	}
+}
